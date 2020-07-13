@@ -9,17 +9,20 @@
     <script>
       var skillNames=["tot","att","str","ran","mag","def","hpx","pra","sum","dun","agi","thi","sla","hun","smi","cra","fle","her","run","coo","con","fir","woo","far","fis","min","div","inv","arc"];
       var fullSkillNames=["Total","Attack","Strength","Ranged","Magic","Defence","Constitution","Prayer","Summoning","Dungeoneering","Agility","Thieving","Slayer","Hunter","Smithing","Crafting","Fletching","Herblore","Runecrafting","Cooking","Construction","Firemaking","Woodcutting","Farming","Fishing","Mining","Divination","Invention","Archeology"];
-      var skillDropdown = document.getElementById("skillDropdown");
-      for(var i = 0; i < skillNames.length; i++) {
-        var el = document.createElement("option");
-        el.text = fullSkillNames[i];
-        el.value = skillNames[i];
-        skillDropdown.add(el);
+      
+      function onLoad() {
+        var skillDropdown = document.getElementById("skillDropdown");
+        for(var i = 0; i < skillNames.length; i++) {
+          var el = document.createElement("option");
+          el.text = fullSkillNames[i];
+          el.value = skillNames[i];
+          skillDropdown.add(el);
+        }
       }
     </script>
   </head>
   
-  <body>
+  <body onload="onLoad()">
     <div>
       <span>Skill:</span>
       <select id="skillDropdown"></select>
