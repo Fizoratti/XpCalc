@@ -6,11 +6,25 @@
     <script type="text/javascript" src="https://runeapps.org/imagedetect.js"></script>
     <script type="text/javascript" src="https://runeapps.org/imagelibs/chatbox.js"></script>
     <script type="text/javascript" src="script/script.js"></script>
+    <script>
+      var skillNames=["tot","att","str","ran","mag","def","hpx","pra","sum","dun","agi","thi","sla","hun","smi","cra","fle","her","run","coo","con","fir","woo","far","fis","min","div","inv","arc"];
+      var fullSkillNames=["Total","Attack","Strength","Ranged","Magic","Defence","Constitution","Prayer","Summoning","Dungeoneering","Agility","Thieving","Slayer","Hunter","Smithing","Crafting","Fletching","Herblore","Runecrafting","Cooking","Construction","Firemaking","Woodcutting","Farming","Fishing","Mining","Divination","Invention","Archeology"];
+      var skillDropdown = document.getElementById("skillDropdown");
+      for(var i = 0; i < skillNames.length; i++) {
+        var el = document.createElement("option");
+        el.textContent = fullSkillNames[i];
+        el.value = skillNames[i];
+        skillDropdown.appendChild(el);
+      }
+    </script>
   </head>
   
   <body>
     <div>
       <span>Skill:</span>
+      <select id="skillDropdown">
+        <option value="atk"
+      </select>
     </div>
   </body>
 </html>
