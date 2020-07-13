@@ -1,0 +1,15 @@
+{
+	"appName": "XpCalculator",
+	"description": "This app will show you remaining actions to target level",
+	"appUrl": "/apps/alt1/xpcalc/",
+	"configUrl": "/apps/alt1/xpcalc/appconfig.json",
+	"iconUrl": "",
+	"defaultWidth": 200,
+	"defaultHeight": 90,
+	"minWidth": 100,
+	"minHeight": 50,
+	"requestHandlers": [ ],
+	"appFrame": "default",
+	"activators": [ "Set Level Target", "Set XP Target", "Clear Target" ],
+	"permissions": "pixel,overlay,gamestate"
+}
