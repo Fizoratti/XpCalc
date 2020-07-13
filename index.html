@@ -12,9 +12,9 @@
       var skillDropdown = document.getElementById("skillDropdown");
       for(var i = 0; i < skillNames.length; i++) {
         var el = document.createElement("option");
-        el.textContent = fullSkillNames[i];
+        el.text = fullSkillNames[i];
         el.value = skillNames[i];
-        skillDropdown.appendChild(el);
+        skillDropdown.add(el);
       }
     </script>
   </head>
