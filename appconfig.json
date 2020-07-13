@@ -1,7 +1,7 @@
 {
 	"appName": "XpCalculator",
 	"description": "This app will show you remaining actions to target level",
-	"appUrl": "/apps/alt1/xpcalc/",
+	"appUrl": "https://wysodami.github.io/XpCalc/",
 	"configUrl": "/apps/alt1/xpcalc/appconfig.json",
 	"iconUrl": "",
 	"defaultWidth": 200,
