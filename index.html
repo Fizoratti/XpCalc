@@ -1,31 +1,39 @@
 <html>
   <head>
+		<link rel="stylesheet" type="text/css" href="https://runeapps.org/runeappslib.css">
+		<link rel="stylesheet" type="text/css" href="css/nis.css"/>
+		<link rel="stylesheet" type="text/css" href="css/styles.css"/>
+		<link rel="stylesheet" type="text/css" href="css/nis/alt1-currentskin/skinstyle.css"/>
     <script type="text/javascript" src="https://runeapps.org/runeappslib.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://runeapps.org/runeappslib.css">
     <script type="text/javascript" src="https://runeapps.org/alt1lib.js"></script>
     <script type="text/javascript" src="https://runeapps.org/imagedetect.js"></script>
     <script type="text/javascript" src="https://runeapps.org/imagelibs/chatbox.js"></script>
-    <script type="text/javascript" src="script/script.js"></script>
-    <script>
-      var skillNames=["tot","att","str","ran","mag","def","hpx","pra","sum","dun","agi","thi","sla","hun","smi","cra","fle","her","run","coo","con","fir","woo","far","fis","min","div","inv","arc"];
-      var fullSkillNames=["Total","Attack","Strength","Ranged","Magic","Defence","Constitution","Prayer","Summoning","Dungeoneering","Agility","Thieving","Slayer","Hunter","Smithing","Crafting","Fletching","Herblore","Runecrafting","Cooking","Construction","Firemaking","Woodcutting","Farming","Fishing","Mining","Divination","Invention","Archeology"];
-      
-      function onLoad() {
-        var skillDropdown = document.getElementById("skillDropdown");
-        for(var i = 0; i < skillNames.length; i++) {
-          var el = document.createElement("option");
-          el.text = fullSkillNames[i];
-          el.value = skillNames[i];
-          skillDropdown.add(el);
-        }
-      }
-    </script>
+		<script type="text/javascript" src="scripts/script.js"></script>
   </head>
   
-  <body onload="onLoad()">
-    <div>
-      <span>Skill:</span>
-      <select id="skillDropdown"></select>
-    </div>
+	<body class="nis" onload="onLoad()">
+		<!-- Skill Select -->
+    <div class="center">
+      <span class="nistext">SKILL:</span>
+      <select class="nisdropdown" id="skillDropdown" onChange="populateCategory()"></select>
+		</div>
+		<!-- Current XP -->
+		<div class="center">
+			<span class="nistext">CURRENT XP:</span>
+			<input class="nisinput input" type="number" id="skillExp"/>
+		</div>
+		<!-- Target level / xp-->
+		<div class="center">
+			<select class="nisdropdown">
+				<option value="targetLevel">Target Level</option>
+				<option value="targetXp">Target XP</option>
+			</select>
+			<input class="nisinput input" type="number" id="target"/>
+		</div>
+		<!-- Category -->
+		<div class="center">
+			<span class="nistext">CATEGORY:</span>
+			<select class="nisdropdown" id="categoryDropdown"></select>
+		</div>
   </body>
 </html>
