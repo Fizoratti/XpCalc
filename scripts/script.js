@@ -31,7 +31,7 @@ function onLoad() {
  */
 function getData() {
 	var head = document.getElementsByTagName('head')[0];
-	for (var i = 1; i < skillNames.length; i++) {
+	for (var i = 1; i < skillNames.length+1; i++) {
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
 		script.src = 'https://spreadsheets.google.com/feeds/cells/1YGpYeEt97XXws7mSOHPIumICZA7_Zu-LyDteHObSYsw/' + i + '/public/values?alt=json-in-script&callback=createRecordJson';
@@ -107,8 +107,8 @@ function createTable() {
 	}
 	catSelected = categoryDropdown.options[categoryDropdown.selectedIndex].text;
 	for (var row = 0; row < records[selectedSkill].data.length; row++) {
-		var tr = tbody.insertRow(row);
 		if ((records[selectedSkill].data[row][catIndx] == catSelected || catSelected === 'All') && row != 0) {
+			var tr = tbody.insertRow();
 			for (var col = 0; col < records[selectedSkill].data[row].length; col++) {
 				if (col != catIndx) {
 					var td = tr.insertCell(col)
