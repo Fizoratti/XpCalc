@@ -1,13 +1,12 @@
 <html>
   <head>
-		<link rel="stylesheet" type="text/css" href="https://runeapps.org/runeappslib.css">
-		<link rel="stylesheet" type="text/css" href="https://runeapps.org/nis/alt1-currentskin/skinstyle.css"/>
 		<link rel="stylesheet" type="text/css" href="nis/nis.css"/>
 		<link rel="stylesheet" type="text/css" href="nis/styles.css"/>
+		<link rel="stylesheet" type="text/css" href="https://runeapps.org/runeappslib.css">
     <script type="text/javascript" src="https://runeapps.org/runeappslib.js"></script>
     <script type="text/javascript" src="https://runeapps.org/alt1lib.js"></script>
     <script type="text/javascript" src="https://runeapps.org/imagedetect.js"></script>
-    <script type="text/javascript" src="https://runeapps.org/imagelibs/chatbox.js"></script>
+    <script type="text/javascript" src="https://runeapps.org/imagelibs/xpcounter.js"></script>
 		<script type="text/javascript" src="scripts/script.js"></script>
   </head>
   
@@ -23,7 +22,7 @@
 		<!-- Current XP -->
 		<div class="center">
 			<span class="nistext">CURRENT XP:</span>
-			<input class="nisinput input" type="number" id="currExp" value="0" onChange="createTable()"/>
+			<input class="nisinput input" type="number" id="currExp" value="" onChange="createTable()"/>
 		</div>
 
 		<!-- Target level / xp-->
@@ -41,6 +40,20 @@
 			<select class="nisdropdown" id="categoryDropdown" onChange="createTable()"></select>
 		</div>
 
+		<!-- Multiplier -->
+		<div class="center" id="multiplierDiv" style="display: none">
+			<span class="nistext">MULTIPLIER:</span>
+			<input class="nisinput input" type="number" id="multiplier" value="0" onChange="createTable()">
+			<span>%</span>
+		</div>
+
+		<!-- Method -->
+		<div class="center" id="methodDiv" style="display: none">
+			<span class="nistext">METHOD:</span>
+			<select class="nisdropdown" id="methodSelected"></select>
+		</div>
+
+		<!-- Table -->
 		<table id="methodTable" class="nistable center-table" style="display: none">
 			<thead>
 				<tr>
