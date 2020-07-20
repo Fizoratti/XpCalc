@@ -15,6 +15,7 @@ var catIndx;
  * Gets all the records from google sheets and populates the skill dropdown
  */
 function onLoad() {
+	if(window.alt1 && alt1.versionint>1001000){alt1.identifyAppUrl("appconfig.json");}
 	getData();
 	skillDropdown = document.getElementById("skillDropdown");
 	categoryDropdown = document.getElementById("categoryDropdown");
