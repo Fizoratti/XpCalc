@@ -4,6 +4,7 @@ var skillDropdown;
 var categoryDropdown;
 var table;
 var selectedSkill;
+var currXp;
 var records = {};
 var lvlIndx;
 var methodIndx;
@@ -17,6 +18,7 @@ function onLoad() {
 	getData();
 	skillDropdown = document.getElementById("skillDropdown");
 	categoryDropdown = document.getElementById("categoryDropdown");
+	currXp = document.getElementById("currExp");
 	table = document.getElementById("methodTable");
 	for (var i = 0; i < skillNames.length; i++) {
 		var el = document.createElement("option");
@@ -113,8 +115,25 @@ function createTable() {
 				if (col != catIndx) {
 					var td = tr.insertCell(col)
 					td.innerHTML = records[selectedSkill].data[row][col];
+					if (col == xpIndx) {
+						var td = tr.insertCell(Number(col)+1);
+						td.innerHTML = remainingActions(returnRemainingXp(), records[selectedSkill].data[row][col]);
+					}
 				}
 			}
 		}
+	}
+}
+
+function remainingActions(remainingXp, methodXp) {
+	return Math.ceil(remainingXp / methodXp);
+}
+
+function returnRemainingXp() {
+	var t = document.getElementById("targetLvlorXp");
+	if (t.options[t.selectedIndex].value == "targetLevel") {
+		return Number(a1lib.lvltoxp(document.getElementById("target").value)) - Number(currXp.value);
+	} else {
+		return Number(document.getElementById("target").value) - Number(currXp.value);
 	}
 }

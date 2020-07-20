@@ -23,16 +23,16 @@
 		<!-- Current XP -->
 		<div class="center">
 			<span class="nistext">CURRENT XP:</span>
-			<input class="nisinput input" type="number" id="skillExp"/>
+			<input class="nisinput input" type="number" id="currExp" value="0" onChange="createTable()"/>
 		</div>
 
 		<!-- Target level / xp-->
 		<div class="center">
-			<select class="nisdropdown">
+			<select class="nisdropdown" id="targetLvlorXp" onChange="returnRemainingXp(); createTable();">
 				<option value="targetXp">Target XP</option>
 				<option value="targetLevel">Target Level</option>
 			</select>
-			<input class="nisinput input" type="number" id="target"/>
+			<input class="nisinput input" type="number" id="target" value="0" onChange="createTable()"/>
 		</div>
 
 		<!-- Category -->
