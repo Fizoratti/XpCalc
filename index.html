@@ -12,7 +12,7 @@
   
 	<body class="nis" onload="onLoad()">
 		<!-- Skill Select -->
-    <div class="center">
+    <div class="center pt">
       <span class="nistext">SKILL:</span>
       <select class="nisdropdown" id="skillDropdown" onChange="populateCategory()">
 				<option></option>
@@ -20,50 +20,52 @@
 		</div>
 
 		<!-- Current XP -->
-		<div class="center">
+		<div class="center pt">
 			<span class="nistext">CURRENT XP:</span>
 			<input class="nisinput input" type="number" id="currExp" value="" onChange="createTable()"/>
 		</div>
 
 		<!-- Target level / xp-->
-		<div class="center">
+		<div class="center pt">
 			<select class="nisdropdown" id="targetLvlorXp" onChange="returnRemainingXp(); createTable();">
 				<option value="targetXp">Target XP</option>
 				<option value="targetLevel">Target Level</option>
 			</select>
-			<input class="nisinput input" type="number" id="target" value="0" onChange="createTable()"/>
+			<input class="nisinput input" type="number" id="target" value="" onChange="createTable()"/>
 		</div>
 
 		<!-- Category -->
-		<div class="center" id="categoryDiv" style="display: none">
+		<div class="center pt" id="categoryDiv" style="display: none">
 			<span class="nistext">CATEGORY:</span>
 			<select class="nisdropdown" id="categoryDropdown" onChange="createTable()"></select>
 		</div>
 
 		<!-- Multiplier -->
-		<div class="center" id="multiplierDiv" style="display: none">
-			<span class="nistext">MULTIPLIER:</span>
+		<div class="center pt" id="multiplierDiv" style="display: none">
+			<span class="nistext">MULTIPLIER: </span>
 			<input class="nisinput input" type="number" id="multiplier" value="0" onChange="createTable()">
 			<span>%</span>
 		</div>
 
 		<!-- Method -->
-		<div class="center" id="methodDiv" style="display: none">
+		<div class="center pt" id="methodDiv" style="display: none">
 			<span class="nistext">METHOD:</span>
 			<select class="nisdropdown" id="methodSelected"></select>
 		</div>
 
 		<!-- Table -->
-		<table id="methodTable" class="nistable center-table" style="display: none">
-			<thead>
-				<tr>
-					<td>Level</td>
-					<td>Name</td>
-					<td>Xp</td>
-					<td># Of Actions</td>
-				</tr>
-			</thead>
-			<tbody></tbody>
-		</table>
+		<div class="pt pb">
+			<table class="nistable center-table" id="methodTable" style="display: none">
+				<thead>
+					<tr>
+						<td class="header-text">Level</td>
+						<td class="header-text">Name</td>
+						<td class="header-text">Xp</td>
+						<td class="header-text">Actions</td>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
   </body>
 </html>

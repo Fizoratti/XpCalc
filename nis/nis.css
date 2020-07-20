@@ -32,7 +32,7 @@
 .nistinyimagebutton.offset2{background-position:-42px 0px;}
 .nistinyimagebutton.offset2:hover{background-position:-42px -19px;}
 
-.nistext{color:#E5E6EB;}
+.nistext{color:#E5E6EB; font-family: 'trajan-pro-3'}
 .nistable{color:#E5E6EB; border:1px solid #666;}
 	.nistable tr:nth-child(even){background:rgba(255,255,255,0.1);}
 	.nistable tr:nth-child(odd){background:rgba(255,255,255,0.15);}

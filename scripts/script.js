@@ -128,10 +128,10 @@ function createTable() {
 				if (col != catIndx) {
 					var td = tr.insertCell(col)
 					if (col == xpIndx) {
-						var m = Math.round(Number(records[selectedSkill].data[row][col]) * (Number(document.getElementById("multiplier").value) / 100));
-						td.innerHTML = formatNumber(Number(records[selectedSkill].data[row][col]) + m);
+						var m = Math.round(Number(records[selectedSkill].data[row][col]) + (Math.round(Number(records[selectedSkill].data[row][col]) * (Number(document.getElementById("multiplier").value) / 100))));
+						td.innerHTML = formatNumber(m);
 						var td = tr.insertCell(Number(col)+1);
-						td.innerHTML = formatNumber(remainingActions(returnRemainingXp(), records[selectedSkill].data[row][col]));
+						td.innerHTML = formatNumber(remainingActions(returnRemainingXp(), m));
 					} else {
 						td.innerHTML = records[selectedSkill].data[row][col];
 					}
