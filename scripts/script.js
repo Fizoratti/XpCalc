@@ -2,9 +2,13 @@ var skillNames = ["pra", "sum", "agi", "thi", "hun", "smi", "cra", "fle", "her",
 var fullSkillNames = ["Prayer", "Summoning", "Agility", "Thieving", "Hunter", "Smithing", "Crafting", "Fletching", "Herblore", "Runecrafting", "Cooking", "Construction", "Firemaking", "Woodcutting", "Farming", "Fishing", "Mining", "Divination", "Archeology"];
 var skillDropdown;
 var categoryDropdown;
+var methodsDropdown;
 var table;
+var mainTableDiv;
+var trainingDisplay;
 var selectedSkill;
 var currXp;
+var currXpTrain;
 var records = {};
 var lvlIndx;
 var methodIndx;
@@ -16,14 +20,15 @@ var skillid = "";
 var prevValue = 0;
 var pauseTick = true;
 
-/**
- * Gets all the records from google sheets and populates the skill dropdown
- */
 function onLoad() {
 	getData();
 	skillDropdown = document.getElementById("skillDropdown");
 	categoryDropdown = document.getElementById("categoryDropdown");
+	methodsDropdown = document.getElementById("methodDropdown");
+	mainTableDiv = document.getElementById("mainTableDiv");
+	trainingDisplay = document.getElementById("trainingDisplay");
 	currXp = document.getElementById("currExp");
+	currXpTrain = document.getElementById("currXpTrain");
 	table = document.getElementById("methodTable");
 	for (var i = 0; i < skillNames.length; i++) {
 		var el = document.createElement("option");
@@ -36,9 +41,6 @@ function onLoad() {
 	 tick();
 }
 
-/**
- * Adds all the script calls to pull data from google spreadsheets
- */
 function getData() {
 	var head = document.getElementsByTagName('head')[0];
 	for (var i = 1; i < skillNames.length+1; i++) {
@@ -49,10 +51,6 @@ function getData() {
 	}
 }
 
-/**
- * Creates a json object of all the skills and their data
- * @param {*} json 
- */
 function createRecordJson(json) {
 	var title = json.feed.title.$t
 	var data = json.feed.entry;
@@ -68,7 +66,7 @@ function createRecordJson(json) {
 		}
 		records[title] = {
 			data: row,
-			categories: ['All']
+			categories: []
 		}
 		if (records[title].data != undefined) {
 			lvlIndx = records[title].data[0].indexOf('Level');
@@ -84,16 +82,13 @@ function createRecordJson(json) {
 	}
 }
 
-/** 
- * Populates the category dropdown based on the selected skill and calls to create the table
-*/
 function populateCategory() {
 	table.setAttribute("style", "display: table");
-	if (skillDropdown.options[skillDropdown.selectedIndex].text) {
+	selectedSkill = skillDropdown.options[skillDropdown.selectedIndex].text;
+	if (skillDropdown.options[skillDropdown.selectedIndex].text && records[selectedSkill].categories.length > 0) {
 		document.getElementById("categoryDiv").setAttribute("style", "display: block;");
 		document.getElementById("multiplierDiv").setAttribute("style", "display: block");
-		document.getElementById("methodDiv").setAttribute("style", "display: block");
-		selectedSkill = skillDropdown.options[skillDropdown.selectedIndex].text;
+		// document.getElementById("methodDiv").setAttribute("style", "display: none");
 		categoryDropdown.options.length = 0;
 		records[selectedSkill].categories.sort();
 		for (var i = 0; i < records[selectedSkill].categories.length; i++) {
@@ -103,6 +98,7 @@ function populateCategory() {
 			categoryDropdown.add(el);
 		}
 		categoryDropdown.options.selectedIndex = 0;
+		populateMethods();
 		createTable();
 	} else {
 		document.getElementById("categoryDiv").setAttribute("style", "display: none;");
@@ -112,9 +108,6 @@ function populateCategory() {
 	}
 }
 
-/**
- * Creates the actual table minus the header (hard coded in html file)
- */
 function createTable() {
 	var tbody = document.getElementById("methodTable").getElementsByTagName('tbody')[0];
 	while (tbody.hasChildNodes()) {
@@ -141,8 +134,21 @@ function createTable() {
 	}
 }
 
-function formatNumber(num) {
-  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+function populateMethods() {
+	if (categoryDropdown.options[categoryDropdown.selectedIndex].value != '' || records[selectedSkill].categories.length != 0)  {
+		document.getElementById("methodDiv").setAttribute("style", "display: block");
+		methodsDropdown.options.length = 0;
+		for (var row = 0; row < records[selectedSkill].data.length; row++) { 
+			if (records[selectedSkill].data[row][catIndx] == categoryDropdown.options[categoryDropdown.selectedIndex].value) {
+				var el = document.createElement("option");
+				el.text = records[selectedSkill].data[row][methodIndx];
+				methodsDropdown.add(el);
+			}
+		}
+	} else {
+		document.getElementById("methodDiv").setAttribute("style", "display: none");
+	}
+
 }
 
 function remainingActions(remainingXp, methodXp) {
@@ -161,6 +167,18 @@ function returnRemainingXp() {
 	} else {
 		return Number(document.getElementById("target").value) - Number(currXp.value);
 	}
+}
+
+function switchToTraining() {
+	mainTableDiv.setAttribute("style", "display: none");
+	trainingDisplay.setAttribute("style", "display: block");
+	currXpTrain.value = currXp.value;
+}
+
+function switchToTable() {
+	mainTableDiv.setAttribute("style", "display: block");
+	trainingDisplay.setAttribute("style", "display: none");
+	currXp.value = currXpTrain.value;
 }
 
 function startFindCounter() {
@@ -192,66 +210,12 @@ function tick() {
 			}
 			prevValue = reader.values[i];
 			if (gainedXp > 0) {
-				currXp.value = Number(currXp.value) + Number(gainedXp);
+				currXp.value = currXpTrain.value = Number(currXp.value) + Number(gainedXp);
 				createTable();
 			}
 		}
 	}
-	// for (var a in hist) { hist[a].visible = false; }
-	// for (var a = 0; a < reader.skills.length; a++) {
-	// 	if (!reader.skills[a]) { continue; }
-	// 	if (reader.values[a] == -1) { continue; }
-	// 	skillread(reader.skills[a], reader.values[a]);
-	// 	if (hist[reader.skills[a]]) { hist[reader.skills[a]].visible = true; }
-	// }
 }
-
-// function setskillicon(skillid) {
-// 	var newid = (typeof skillid == "string" ? iconoffset(skillid) : skillid);
-// 	if (newid == -1) {
-// 		elid("xpskillicon").style.display = "none";
-// 	}
-// 	else {
-// 		elid("xpskillicon").style.backgroundPosition = "0px " + (-28 * newid) + "px";
-// 		elid("xpskillicon").style.display = "";
-// 	}
-// }
-
-// function fixintervals() {
-// 	if (mode == "fixed") { measuretime = fixedtime; }
-// 	if (mode == "start") { measuretime = currenttime - measurestart; }
-// 	measuretime = Math.min(measuretime, deletetime);
-// }
-
-// function skillread(skill, xp) {
-// 	if (!hist[skill]) {
-// 		hist[skill] = { id: skill, offcount: 0, data: [], visible: true };
-// 	}
-// 	var obj = hist[skill];
-// 	var last = obj.data[obj.data.length - 1];
-// 	if (!last) { last = { xp: 0, time: 0 }; }
-
-// 	var dxp = xp - last.xp;
-// 	if (dxp == 0) { return; }
-
-// 	var expected = dxp > 0 && dxp < 100000;//expected change is positive and below 100k
-// 	if (last.xp == 0 || obj.offcount > 10 || expected) {
-
-// 		//make previous records relative to new counter value (after counter reset or glitch)
-// 		if (!expected && dxp != 0) {
-// 			qw(skill + " reset, d=" + dxp);
-// 			for (var b = 0; b < obj.data.length; b++) { obj.data[b].xp += dxp; }
-// 		}
-
-// 		obj.data.push({ xp: xp, time: time });
-// 		obj.offcount = 0;
-// 	}
-// 	else {
-// 		obj.offcount++;
-// 	}
-
-// 	if (skill == skillid && dxp != 0) { lastchange = currenttime; }
-// }
 
 function xpcounterRoundError() {
 	if (localStorage.xpmeter_roundwarning=="true") { return;}
@@ -261,5 +225,8 @@ function xpcounterRoundError() {
 		{ t: "button", text: "Close", onclick: function () { box.frame.close(); } },
 		{ t: "button", text: "Don't show again", onclick: function () { box.frame.close(); localStorage.xpmeter_roundwarning = "true"; } },
 	]);
+}
 
+function formatNumber(num) {
+  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
