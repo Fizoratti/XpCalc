@@ -23,7 +23,7 @@
 			<!-- Current XP -->
 			<div class="center pt">
 				<span class="nistext">CURRENT XP:</span>
-				<input class="nisinput input" type="number" id="currExp" value="" onChange="createTable()"/>
+				<input class="nisinput" type="number" id="currExp" value="" oninput="createTable()"/>
 			</div>
 
 			<!-- Target level / xp-->
@@ -32,7 +32,7 @@
 					<option value="targetXp">Target XP</option>
 					<option value="targetLevel">Target Level</option>
 				</select>
-				<input class="nisinput input" type="number" id="target" value="" onChange="createTable()"/>
+				<input class="nisinput" type="number" id="target" value="" oninput="createTable()"/>
 			</div>
 
 			<!-- Category -->
@@ -44,7 +44,7 @@
 			<!-- Multiplier -->
 			<div class="center pt" id="multiplierDiv" style="display: none">
 				<span class="nistext">MULTIPLIER: </span>
-				<input class="nisinput input" type="number" id="multiplier" value="0" onChange="createTable()">
+				<input class="nisinput" type="number" id="multiplier" value="0" oninput="createTable()">
 				<span>%</span>
 			</div>
 
@@ -72,12 +72,12 @@
 		</div>
 		<div id="trainingDisplay" style="display: none;">
 			<div class="center">
-				<input class="input" id="currXpTrain" type="number" value="" />
-				<button onClick="switchToTable()">Back</button>
+				<button class="btn" onClick="switchToTable()"></button>
+				<input class="trainingInput" id="currXpTrain" type="number" value="" oninput="trainingUpdate()" />
 			</div>
-			<div class="center">
-				<span class="nistext">Seren Stone</span>
-				<span class="nistext">1231564</span>
+			<div class="center flexColDisplay">
+				<span class="nistext fontLarger" id="methodName"></span>
+				<span class="nistext fontLarge" id="methodAmount"></span>
 			</div>
 		</div>
   </body>

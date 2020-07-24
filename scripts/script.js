@@ -9,6 +9,8 @@ var trainingDisplay;
 var selectedSkill;
 var currXp;
 var currXpTrain;
+var currMethodName;
+var currMethodAmount;
 var records = {};
 var lvlIndx;
 var methodIndx;
@@ -18,7 +20,7 @@ var reader = new XpcounterReader();
 var mode = localStorage.xpmeter_mode == "start" ? "start" : "fixed";// fixed || start
 var skillid = "";
 var prevValue = 0;
-var pauseTick = true;
+var viewTable = true;
 
 function onLoad() {
 	getData();
@@ -29,6 +31,8 @@ function onLoad() {
 	trainingDisplay = document.getElementById("trainingDisplay");
 	currXp = document.getElementById("currExp");
 	currXpTrain = document.getElementById("currXpTrain");
+	currMethodName = document.getElementById("methodName");
+	currMethodAmount = document.getElementById("methodAmount");
 	table = document.getElementById("methodTable");
 	for (var i = 0; i < skillNames.length; i++) {
 		var el = document.createElement("option");
@@ -88,7 +92,6 @@ function populateCategory() {
 	if (skillDropdown.options[skillDropdown.selectedIndex].text && records[selectedSkill].categories.length > 0) {
 		document.getElementById("categoryDiv").setAttribute("style", "display: block;");
 		document.getElementById("multiplierDiv").setAttribute("style", "display: block");
-		// document.getElementById("methodDiv").setAttribute("style", "display: none");
 		categoryDropdown.options.length = 0;
 		records[selectedSkill].categories.sort();
 		for (var i = 0; i < records[selectedSkill].categories.length; i++) {
@@ -170,15 +173,30 @@ function returnRemainingXp() {
 }
 
 function switchToTraining() {
+	viewTable = false;
 	mainTableDiv.setAttribute("style", "display: none");
 	trainingDisplay.setAttribute("style", "display: block");
+	trainingUpdate();
+}
+
+function trainingUpdate() {
 	currXpTrain.value = currXp.value;
+	var selectedMethod = methodsDropdown.options[methodsDropdown.selectedIndex].value;
+	for (var row = 0; row < records[selectedSkill].data.length; row++) {
+		if (records[selectedSkill].data[row][methodIndx] == selectedMethod && records[selectedSkill].data[row][catIndx] == categoryDropdown.options[categoryDropdown.selectedIndex].value) {
+			currMethodName.innerHTML = selectedMethod;
+			var m = Math.round(Number(records[selectedSkill].data[row][xpIndx]) + (Math.round(Number(records[selectedSkill].data[row][xpIndx]) * (Number(document.getElementById("multiplier").value) / 100))));
+			currMethodAmount.innerHTML = formatNumber(remainingActions(returnRemainingXp(), m));
+		}
+	}
 }
 
 function switchToTable() {
+	viewTable = true;
 	mainTableDiv.setAttribute("style", "display: block");
 	trainingDisplay.setAttribute("style", "display: none");
 	currXp.value = currXpTrain.value;
+	createTable();
 }
 
 function startFindCounter() {
@@ -211,6 +229,11 @@ function tick() {
 			prevValue = reader.values[i];
 			if (gainedXp > 0) {
 				currXp.value = currXpTrain.value = Number(currXp.value) + Number(gainedXp);
+				if (viewTable) {
+					createTable();
+				} else {
+					trainingUpdate();
+				}
 				createTable();
 			}
 		}
