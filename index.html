@@ -1,84 +1,93 @@
 <html>
-  <head>
-		<link rel="stylesheet" type="text/css" href="nis/nis.css"/>
-		<link rel="stylesheet" type="text/css" href="nis/styles.css"/>
-		<link rel="stylesheet" type="text/css" href="https://runeapps.org/runeappslib.css">
-    <script type="text/javascript" src="https://runeapps.org/runeappslib.js"></script>
-    <script type="text/javascript" src="https://runeapps.org/alt1lib.js"></script>
-    <script type="text/javascript" src="https://runeapps.org/imagedetect.js"></script>
-    <script type="text/javascript" src="https://runeapps.org/imagelibs/xpcounter.js"></script>
-		<script type="text/javascript" src="scripts/script.js"></script>
-  </head>
-  
-	<body class="nis" onload="onLoad()">
-		<div id="mainTableDiv" style="display: block">
-			<!-- Skill Select -->
-			<div class="center pt">
-				<span class="nistext">SKILL:</span>
-				<select class="nisdropdown" id="skillDropdown" onChange="populateCategory()">
-					<option></option>
-				</select>
-			</div>
 
-			<!-- Current XP -->
-			<div class="center pt">
-				<span class="nistext">CURRENT XP:</span>
-				<input class="nisinput" type="number" id="currExp" value="" oninput="createTable()"/>
-			</div>
+<head>
+	<link rel="stylesheet" type="text/css" href="nis/nis.css" />
+	<link rel="stylesheet" type="text/css" href="nis/styles.css" />
+	<link rel="stylesheet" type="text/css" href="https://runeapps.org/runeappslib.css">
+	<script type="text/javascript" src="https://runeapps.org/runeappslib.js"></script>
+	<script type="text/javascript" src="https://runeapps.org/alt1lib.js"></script>
+	<script type="text/javascript" src="https://runeapps.org/imagedetect.js"></script>
+	<script type="text/javascript" src="https://runeapps.org/imagelibs/xpcounter.js"></script>
+	<script type="text/javascript" src="scripts/script.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		});</script>
+</head>
 
-			<!-- Target level / xp-->
-			<div class="center pt">
-				<select class="nisdropdown" id="targetLvlorXp" onChange="returnRemainingXp(); createTable();">
-					<option value="targetXp">Target XP</option>
-					<option value="targetLevel">Target Level</option>
-				</select>
-				<input class="nisinput" type="number" id="target" value="" oninput="createTable()"/>
-			</div>
+<body class="nis" onload="onLoad()">
+	<a class="info" href="https://docs.google.com/spreadsheets/d/1YGpYeEt97XXws7mSOHPIumICZA7_Zu-LyDteHObSYsw/edit#gid=0"
+		target="_blank" data-toggle="tooltip" title="Link to global google spreadsheet.&#13;&#10;If there is something missing you can add it here.&#13;&#10;IMPORTANT NOTE:&#13;&#10;This is GLOBAL meaning anyone can edit this and will reflect to all users." id="message"></a>
 
-			<!-- Category -->
-			<div class="center pt" id="categoryDiv" style="display: none">
-				<span class="nistext">CATEGORY:</span>
-				<select class="nisdropdown" id="categoryDropdown" onChange="createTable(); populateMethods();"></select>
-			</div>
-
-			<!-- Multiplier -->
-			<div class="center pt" id="multiplierDiv" style="display: none">
-				<span class="nistext">MULTIPLIER: </span>
-				<input class="nisinput" type="number" id="multiplier" value="0" oninput="createTable()">
-				<span>%</span>
-			</div>
-
-			<!-- Method -->
-			<div class="center pt" id="methodDiv" style="display: none">
-				<span class="nistext">METHOD:</span>
-				<select class="nisdropdown" id="methodDropdown"></select>
-				<button class="nisbutton nissmallbutton" onClick="switchToTraining()">Train!</button>
-			</div>
-
-			<!-- Table -->
-			<div class="pt pb">
-				<table class="nistable center-table" id="methodTable" style="display: none">
-					<thead>
-						<tr>
-							<td class="header-text">Level</td>
-							<td class="header-text">Name</td>
-							<td class="header-text">Xp</td>
-							<td class="header-text">Actions</td>
-						</tr>
-					</thead>
-					<tbody></tbody>
-				</table>
-			</div>
+	<div id="mainTableDiv" style="display: block">
+		<!-- Skill Select -->
+		<div class="center pt">
+			<span class="nistext">SKILL:</span>
+			<select class="nisdropdown" id="skillDropdown" onChange="populateCategory()">
+				<option></option>
+			</select>
 		</div>
-		<div id="trainingDisplay" style="display: none;">
-			<div class="center">
-				<button class="btn" onClick="switchToTable()"></button>
-				<input class="trainingInput" id="currXpTrain" type="number" value="" oninput="trainingUpdate()" />
-			</div>
-			<div class="center flexColDisplay">
-				<span class="nistext fontLarger" id="methodName"></span>
-				<span class="nistext fontLarge" id="methodAmount"></span>
-			</div>
+
+		<!-- Current XP -->
+		<div class="center pt">
+			<span class="nistext">CURRENT XP:</span>
+			<input class="nisinput" type="number" id="currExp" value="" oninput="createTable()" />
 		</div>
-  </body>
+
+		<!-- Target level / xp-->
+		<div class="center pt">
+			<select class="nisdropdown" id="targetLvlorXp" onChange="returnRemainingXp(); createTable();">
+				<option value="targetXp">Target XP</option>
+				<option value="targetLevel">Target Level</option>
+			</select>
+			<input class="nisinput" type="number" id="target" value="" oninput="createTable()" />
+		</div>
+
+		<!-- Category -->
+		<div class="center pt" id="categoryDiv" style="display: none">
+			<span class="nistext">CATEGORY:</span>
+			<select class="nisdropdown" id="categoryDropdown" onChange="createTable(); populateMethods();"></select>
+		</div>
+
+		<!-- Multiplier -->
+		<div class="center pt" id="multiplierDiv" style="display: none">
+			<span class="nistext">MULTIPLIER: </span>
+			<input class="nisinput" type="number" id="multiplier" value="0" oninput="createTable()">
+			<span>%</span>
+		</div>
+
+		<!-- Method -->
+		<div class="center pt" id="methodDiv" style="display: none">
+			<span class="nistext">METHOD:</span>
+			<select class="nisdropdown" id="methodDropdown"></select>
+			<button class="nisbutton nissmallbutton" onClick="switchToTraining()">Train!</button>
+		</div>
+
+		<!-- Table -->
+		<div class="pt pb">
+			<table class="nistable center-table" id="methodTable" style="display: none">
+				<thead>
+					<tr>
+						<td class="header-text">Level</td>
+						<td class="header-text">Name</td>
+						<td class="header-text">Xp</td>
+						<td class="header-text">Actions</td>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+	<div id="trainingDisplay" style="display: none;">
+		<div class="center">
+			<button class="btn" onClick="switchToTable()"></button>
+			<input class="trainingInput" id="currXpTrain" type="number" value="" oninput="trainingUpdate()" />
+		</div>
+		<div class="center flexColDisplay">
+			<span class="nistext fontLarger" id="methodName"></span>
+			<span class="nistext fontLarge" id="methodAmount"></span>
+		</div>
+	</div>
+</body>
+
 </html>

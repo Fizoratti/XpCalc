@@ -28,3 +28,17 @@ input { text-align: center; }
 	top: 5px;
 	left: 5px;
 }
+
+.info {
+	background-image: url(default/info.svg);
+	background-color: transparent;
+	border: none;
+	font-size: 16px;
+	height: 15px;
+	width: 15px;
+	background-repeat: no-repeat;
+	cursor: pointer;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}

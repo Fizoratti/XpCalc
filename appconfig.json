@@ -3,7 +3,7 @@
 	"description": "This app will show you remaining actions to target level",
 	"appUrl": "https://wysodami.github.io/XpCalc/",
 	"configUrl": "https://wysodami.github.io/XpCalc/appconfig.json",
-	"iconUrl": "",
+	"iconUrl": "Xp_Calculator.ico",
 	"defaultWidth": 200,
 	"defaultHeight": 90,
 	"minWidth": 100,
