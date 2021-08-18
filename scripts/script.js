@@ -184,7 +184,7 @@ function trainingUpdate() {
 	for (var row = 0; row < records[selectedSkill].data.length; row++) {
 		if (records[selectedSkill].data[row].method == selectedMethod && records[selectedSkill].data[row].category == categoryDropdown.options[categoryDropdown.selectedIndex].value) {
 			currMethodName.innerHTML = selectedMethod;
-			var m = Math.round(Number(records[selectedSkill].data[row].xp) + (Math.round(Number(records[selectedSkill].data[row].xp) * (Number(document.getElementById("multiplier").value) / 100))));
+			var m = +(Number(records[selectedSkill].data[row].xp) + (Number(records[selectedSkill].data[row].xp) * (Number(document.getElementById("multiplier").value) / 100))).toFixed(1);
 			currMethodAmount.innerHTML = formatNumber(remainingActions(returnRemainingXp(), m));
 		}
 	}
