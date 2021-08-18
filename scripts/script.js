@@ -114,32 +114,6 @@ function populateCategory() {
 	}
 }
 
-/* function createTable() {
-	var tbody = document.getElementById("methodTable").getElementsByTagName('tbody')[0];
-	while (tbody.hasChildNodes()) {
-		tbody.removeChild(tbody.lastChild);
-	}
-	catSelected = categoryDropdown.options[categoryDropdown.selectedIndex].text;
-	for (var row = 0; row < records[selectedSkill].data.length; row++) {
-		if ((records[selectedSkill].data[row].category == catSelected || catSelected === 'All') && row != 0) {
-			var tr = tbody.insertRow();
-			for (var col = 0; col < records[selectedSkill].data.length; col++) {
-				if (col != catIndx) {
-					var td = tr.insertCell(col)
-					if (col == xpIndx) {
-						var m = Math.round(Number(records[selectedSkill].data[row][col]) + (Math.round(Number(records[selectedSkill].data[row][col]) * (Number(document.getElementById("multiplier").value) / 100))));
-						td.innerHTML = formatNumber(m);
-						var td = tr.insertCell(Number(col)+1);
-						td.innerHTML = formatNumber(remainingActions(returnRemainingXp(), m));
-					} else {
-						td.innerHTML = records[selectedSkill].data[row][col];
-					}
-				}
-			}
-		}
-	}
-} */
-
 function createTable() {
 	var tbody = document.getElementById("methodTable").getElementsByTagName('tbody')[0];
 	while (tbody.hasChildNodes()) {
