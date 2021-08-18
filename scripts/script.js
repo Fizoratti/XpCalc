@@ -12,18 +12,18 @@ var currXpTrain;
 var currMethodName;
 var currMethodAmount;
 var records = {};
-var lvlIndx;
-var methodIndx;
-var xpIndx;
-var catIndx;
+var lvlIndx = 0;
+var methodIndx = 1;
+var xpIndx = 2;
+var catIndx = 3;
 var reader = new XpcounterReader();
 var mode = localStorage.xpmeter_mode == "start" ? "start" : "fixed";// fixed || start
 var skillid = "";
 var prevValue = 0;
 var viewTable = true;
 
+/** Assigns elements to respective variables, creates skill dropdown, and finds counter **/
 function onLoad() {
-	getData();
 	skillDropdown = document.getElementById("skillDropdown");
 	categoryDropdown = document.getElementById("categoryDropdown");
 	methodsDropdown = document.getElementById("methodDropdown");
@@ -34,6 +34,7 @@ function onLoad() {
 	currMethodName = document.getElementById("methodName");
 	currMethodAmount = document.getElementById("methodAmount");
 	table = document.getElementById("methodTable");
+	getData();
 	for (var i = 0; i < skillNames.length; i++) {
 		var el = document.createElement("option");
 		el.text = fullSkillNames[i];
@@ -46,41 +47,43 @@ function onLoad() {
 }
 
 function getData() {
-	var head = document.getElementsByTagName('head')[0];
-	for (var i = 1; i < skillNames.length+1; i++) {
-		var script = document.createElement('script');
-		script.type = 'text/javascript';
-		script.src = 'https://spreadsheets.google.com/feeds/cells/1YGpYeEt97XXws7mSOHPIumICZA7_Zu-LyDteHObSYsw/' + i + '/public/values?alt=json-in-script&callback=createRecordJson';
-		head.appendChild(script);
+	for (var i = 0; i < skillNames.length; i++) {
+		let skillName = fullSkillNames[i]
+		var url = 'https://sheets.googleapis.com/v4/spreadsheets/1YGpYeEt97XXws7mSOHPIumICZA7_Zu-LyDteHObSYsw/values/' + skillName + '?alt=json&key=AIzaSyAvamFsTw5DoHtrcXatlApL1GQhABhVIhI';
+		$.getJSON(url).success(function(data) {
+			createRecordJson(data.values, skillName);
+		});
 	}
+	mainTableDiv.setAttribute("style", "display: block");
 }
 
-function createRecordJson(json) {
-	var title = json.feed.title.$t
-	var data = json.feed.entry;
-	var row = [[]];
+/* 
+	creates the records objects in the form of: 
+	{
+		prayer: {
+			data: [ { lvl: '1', method: 'Ashes', xp: '4', category: 'ash' } ],
+			categories: ['Bones and Ashes', 'Urns']
+		}
+	}
+*/
+function createRecordJson(data, skillName) {
+	skillingMethodValues = [];
 	if (data) {
-		for(var r=0; r < data.length; r++) {
-			var cell = data[r]["gs$cell"];
-			var val = cell["$t"];
-			if (!row[cell.row-1]) {
-				row[cell.row-1] = [];
-			}
-			row[cell.row - 1][cell.col - 1] = val;
+		for(var r=1; r < data.length; r++) {
+			skillingMethodValues.push({
+				lvl: data[r][lvlIndx],
+				method: data[r][methodIndx],
+				xp: data[r][xpIndx],
+				category: data[r][catIndx]
+			});
 		}
-		records[title] = {
-			data: row,
+		records[skillName] = {
+			data: skillingMethodValues,
 			categories: []
-		}
-		if (records[title].data != undefined) {
-			lvlIndx = records[title].data[0].indexOf('Level');
-			methodIndx = records[title].data[0].indexOf('Method');
-			xpIndx = records[title].data[0].indexOf('Xp');
-			catIndx = records[title].data[0].indexOf('Category');
-			for(var i = 1; i < records[title].data.length; i++) {
-				if (!records[title].categories.includes(records[title].data[i][catIndx])) {
-					records[title].categories.push(records[title].data[i][catIndx]);
-				}
+		};
+		for(var i = 0; i < records[skillName].data.length; i++) {
+			if (!records[skillName].categories.includes(records[skillName].data[i].category)) {
+				records[skillName].categories.push(records[skillName].data[i].category);
 			}
 		}
 	}
@@ -89,7 +92,7 @@ function createRecordJson(json) {
 function populateCategory() {
 	table.setAttribute("style", "display: table");
 	selectedSkill = skillDropdown.options[skillDropdown.selectedIndex].text;
-	if (skillDropdown.options[skillDropdown.selectedIndex].text && records[selectedSkill].categories.length > 0) {
+	if (skillDropdown.options[skillDropdown.selectedIndex].text && records[selectedSkill].categories && records[selectedSkill].categories.length > 0) {
 		document.getElementById("categoryDiv").setAttribute("style", "display: block;");
 		document.getElementById("multiplierDiv").setAttribute("style", "display: block");
 		categoryDropdown.options.length = 0;
@@ -111,16 +114,16 @@ function populateCategory() {
 	}
 }
 
-function createTable() {
+/* function createTable() {
 	var tbody = document.getElementById("methodTable").getElementsByTagName('tbody')[0];
 	while (tbody.hasChildNodes()) {
 		tbody.removeChild(tbody.lastChild);
 	}
 	catSelected = categoryDropdown.options[categoryDropdown.selectedIndex].text;
 	for (var row = 0; row < records[selectedSkill].data.length; row++) {
-		if ((records[selectedSkill].data[row][catIndx] == catSelected || catSelected === 'All') && row != 0) {
+		if ((records[selectedSkill].data[row].category == catSelected || catSelected === 'All') && row != 0) {
 			var tr = tbody.insertRow();
-			for (var col = 0; col < records[selectedSkill].data[row].length; col++) {
+			for (var col = 0; col < records[selectedSkill].data.length; col++) {
 				if (col != catIndx) {
 					var td = tr.insertCell(col)
 					if (col == xpIndx) {
@@ -135,6 +138,28 @@ function createTable() {
 			}
 		}
 	}
+} */
+
+function createTable() {
+	var tbody = document.getElementById("methodTable").getElementsByTagName('tbody')[0];
+	while (tbody.hasChildNodes()) {
+		tbody.removeChild(tbody.lastChild);
+	}
+	catSelected = categoryDropdown.options[categoryDropdown.selectedIndex].text;
+	for (var row = 0; row < records[selectedSkill].data.length; row++) {
+		if ((records[selectedSkill].data[row].category == catSelected || catSelected === 'All')) {
+			var tr = tbody.insertRow();
+			var td = tr.insertCell(0);
+			td.innerHTML = records[selectedSkill].data[row].lvl;
+			td = tr.insertCell(1);
+			td.innerHTML = records[selectedSkill].data[row].method;
+			td = tr.insertCell(2);
+			var m = +(Number(records[selectedSkill].data[row].xp) + (Number(records[selectedSkill].data[row].xp) * (Number(document.getElementById("multiplier").value) / 100))).toFixed(1);
+			td.innerHTML = formatNumber(m);
+			td = tr.insertCell(3);
+			td.innerHTML = formatNumber(remainingActions(returnRemainingXp(), m));
+		}
+	}
 }
 
 function populateMethods() {
@@ -142,9 +167,9 @@ function populateMethods() {
 		document.getElementById("methodDiv").setAttribute("style", "display: block");
 		methodsDropdown.options.length = 0;
 		for (var row = 0; row < records[selectedSkill].data.length; row++) { 
-			if (records[selectedSkill].data[row][catIndx] == categoryDropdown.options[categoryDropdown.selectedIndex].value) {
+			if (records[selectedSkill].data[row].category == categoryDropdown.options[categoryDropdown.selectedIndex].value || categoryDropdown.options[categoryDropdown.selectedIndex].value == "All") {
 				var el = document.createElement("option");
-				el.text = records[selectedSkill].data[row][methodIndx];
+				el.text = records[selectedSkill].data[row].method;
 				methodsDropdown.add(el);
 			}
 		}
@@ -183,9 +208,9 @@ function trainingUpdate() {
 	currXpTrain.value = currXp.value;
 	var selectedMethod = methodsDropdown.options[methodsDropdown.selectedIndex].value;
 	for (var row = 0; row < records[selectedSkill].data.length; row++) {
-		if (records[selectedSkill].data[row][methodIndx] == selectedMethod && records[selectedSkill].data[row][catIndx] == categoryDropdown.options[categoryDropdown.selectedIndex].value) {
+		if (records[selectedSkill].data[row].method == selectedMethod && records[selectedSkill].data[row].category == categoryDropdown.options[categoryDropdown.selectedIndex].value) {
 			currMethodName.innerHTML = selectedMethod;
-			var m = Math.round(Number(records[selectedSkill].data[row][xpIndx]) + (Math.round(Number(records[selectedSkill].data[row][xpIndx]) * (Number(document.getElementById("multiplier").value) / 100))));
+			var m = Math.round(Number(records[selectedSkill].data[row].xp) + (Math.round(Number(records[selectedSkill].data[row].xp) * (Number(document.getElementById("multiplier").value) / 100))));
 			currMethodAmount.innerHTML = formatNumber(remainingActions(returnRemainingXp(), m));
 		}
 	}
